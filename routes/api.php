@@ -30,9 +30,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -69,8 +66,8 @@ Route::middleware('auth:sanctum')->group( function () {
         Route::get('/recruiters', [DashboardController::class, 'getRecruiters']);
         Route::get('/users', [DashboardController::class, 'getUsers']);
     });
+    Route::get('/getSession', [StripeController::class, 'createCheckoutSession']);
 });
 Route::get('user-details/{id}', [UsersConntroller::class, 'show']);
 
-Route::get('/getSession', [StripeController::class, 'createCheckoutSession']);
 Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);

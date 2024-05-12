@@ -26,7 +26,7 @@ class StripeController extends Controller
     public function createCheckoutSession(Request $request)
     {
         $userID = Auth::id();
-        
+       
         $session = Session::create([
             'payment_method_types' => ['card'],
             'line_items' => [
@@ -42,8 +42,8 @@ class StripeController extends Controller
                 ],
             ],
             'mode' => 'payment',
-            'success_url' => 'http://127.0.0.1:8080/success', 
-            'cancel_url' => 'http://127.0.0.1:8080', 
+            'success_url' => 'http://127.0.0.1:8080/successful', 
+            'cancel_url' => 'http://127.0.0.1:8080/payments', 
             'client_reference_id' => $userID,
         ]);
 
