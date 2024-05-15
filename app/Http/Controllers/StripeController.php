@@ -83,8 +83,4 @@ class StripeController extends Controller
             return response()->json(['error' => 'Invalid signature'], 400);
         }
     }
-
-
-
-
 }

@@ -20,7 +20,7 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs = Job::with('location','category')->get();
+        $jobs = Job::with('location','category','user')->get();
         return response()->json(['data' => $jobs]);
     }
 

@@ -39,6 +39,7 @@ Route::get('/jobs', [JobController::class, 'index']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/location', [LocationController::class,  'index']);
+Route::get('/{id}', [JobController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group( function () {
     Route::group(['prefix' => 'jobs'], function () {
@@ -48,7 +49,14 @@ Route::middleware('auth:sanctum')->group( function () {
         Route::delete('/{id}', [JobController::class, 'destroy']);
         Route::get('/app/{id}', [JobController::class, 'showApplications']);
     });
-    Route::get('/recruiter-jobs', [JobController::class, 'recruiterJobsIndex']);
+    
+    
+    Route::group(['prefix' => 'applicant'], function () {
+        Route::get('/applied-jobs', [ApplicationController::class, 'showAppliedJobs']); 
+        Route::get('/recruiter-jobs', [JobController::class, 'recruiterJobsIndex']);
+    
+        Route::get('/recruiter-applications', [ApplicationController::class, 'showMyApplicants']);
+    });
 
     Route::group(['prefix' => 'applications'], function () {
         Route::get('/', [ApplicationController::class, 'index']);
@@ -58,8 +66,7 @@ Route::middleware('auth:sanctum')->group( function () {
         Route::delete('/{id}', [ApplicationController::class, 'destroy']);
         Route::get('/rec/{id}', [ApplicationController::class, 'showApplicationsForRecruiter']);
     });
-    Route::get('/recruiter-applications', [ApplicationController::class, 'showMyApplicants']);
-    Route::get('/applied', [ApplicationController::class, 'applied']); 
+
     
     Route::group(['prefix' => 'admin/dash'], function () {
         Route::get('/counts', [DashboardController::class, 'getCounts']);
@@ -70,4 +77,4 @@ Route::middleware('auth:sanctum')->group( function () {
 });
 Route::get('user-details/{id}', [UsersConntroller::class, 'show']);
 
-Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);
+Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']); //webhook for local testing

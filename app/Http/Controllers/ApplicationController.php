@@ -6,6 +6,7 @@ use App\Models\Application;
 use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ApplicationController extends Controller
@@ -51,7 +52,10 @@ class ApplicationController extends Controller
         }
 
         $resumePath = $request->file('resume')->store('resumes');
-    
+
+        $resumeUrl = Storage::url($resumePath);
+        // dd($resumeUrl);
+
         Application::create([
             'user_id' => $user->id,
             'resume' => $resumePath,
@@ -64,7 +68,7 @@ class ApplicationController extends Controller
         $job = Job::findOrFail($request->input('job_id'));
         $job->increment('applications');
 
-        return response()->json(['message' => 'Application Sent Successful'], 201);
+        return response()->json(['message' => 'Application Sent Successful', 'path' => $resumeUrl], 201);
 
     }
 
@@ -74,7 +78,7 @@ class ApplicationController extends Controller
     public function show($id)
     {
         $application = Application::with('user', 'job')->findOrFail($id);
-        return response()->json(['data' => $application]);
+        return response()->json(['data' => $application ]);
     }
 
     /**
@@ -122,7 +126,7 @@ class ApplicationController extends Controller
     /**
      * List applied jobs per user
      */
-    public function applied()
+    public function showAppliedJobs()
     {
         $applications = Application::with('job')->where('user_id', Auth::id())->get();
 
@@ -132,6 +136,7 @@ class ApplicationController extends Controller
           
         return response()->json(['data' => $applications]);
     }
+
     /**
      * List recruiter applications
      */
@@ -154,4 +159,5 @@ class ApplicationController extends Controller
 
         return response()->json(['data' => $applications]);
     }
+
 }
