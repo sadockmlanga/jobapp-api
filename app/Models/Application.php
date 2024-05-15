@@ -4,12 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Application extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $appends = ['resume_url'];
+
+    public function getResumeUrlAttribute()
+    {
+        return Storage::url('public/resumes/' . $this->resume);
+    }
 
     public function job()
     {

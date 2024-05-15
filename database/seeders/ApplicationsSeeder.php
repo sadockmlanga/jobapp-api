@@ -26,7 +26,7 @@ class ApplicationsSeeder extends Seeder
             Application::create([
                 'job_id' => $jobs->random(),
                 'user_id' => $users->random(),
-                'resume' => 'public/resumes' . 'demoResume.pdf', 
+                'resume' => 'demoResume.pdf', 
                 'cover_letter' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 
                 'status' => 'applied', 
             ]);

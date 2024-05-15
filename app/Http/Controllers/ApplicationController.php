@@ -51,14 +51,15 @@ class ApplicationController extends Controller
             return response()->json(["message" => "You have already applied for this job"]);
         }
 
-        $resumePath = $request->file('resume')->store('resumes');
+        // $resumePath = $request->file('resume')->store('resumes');
 
-        $resumeUrl = Storage::url($resumePath);
-        // dd($resumeUrl);
+        $file = $request->file('resume');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs('public/resumes', $filename);
 
         Application::create([
             'user_id' => $user->id,
-            'resume' => $resumePath,
+            'resume' => $filename,
             'cover_letter' => $request->input('cover_letter'),
             'job_id' => $request->input('job_id'),
             'status' => 'applied'
@@ -68,7 +69,7 @@ class ApplicationController extends Controller
         $job = Job::findOrFail($request->input('job_id'));
         $job->increment('applications');
 
-        return response()->json(['message' => 'Application Sent Successful', 'path' => $resumeUrl], 201);
+        return response()->json(['message' => 'Application Sent Successful', 'path' => $path ], 201);
 
     }
 
